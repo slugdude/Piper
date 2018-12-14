@@ -65,6 +65,10 @@ public class PiperCommand {
 		return command.toString();
 	}
 
+	public String getFormattedCommand() {
+		return String.join(" ", command);
+	}
+
 	public String getAddress() {
 		return address.getHostAddress();
 	}
