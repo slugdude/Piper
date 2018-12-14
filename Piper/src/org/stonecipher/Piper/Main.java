@@ -54,13 +54,9 @@ public class Main extends JavaPlugin {
 						boolean success = Bukkit.getScheduler().callSyncMethod(this, new Callable<Boolean>() {
 							@Override
 							public Boolean call() {
-								boolean result = Bukkit.getServer().dispatchCommand(wrapper,
-										inputCommand.getFormattedCommand());
-								wrapper.close();
-								return result;
+								return Bukkit.getServer().dispatchCommand(wrapper, inputCommand.getFormattedCommand());
 							}
 						}).get();
-
 					} else {
 						getLogger().info("Denied access for client \'" + inputCommand.getAddress()
 								+ "\'. Invalid access token!");

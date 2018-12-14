@@ -55,18 +55,6 @@ public class PiperExecutor implements ConsoleCommandSender {
 		}
 	}
 
-	public void close() {
-		try {
-			PrintWriter dOut = new PrintWriter(new DataOutputStream(socket.getOutputStream()));
-			dOut.println("!:" + token);
-			dOut.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public PermissionAttachment addAttachment(Plugin arg0) {
 		return sender.addAttachment(arg0);
