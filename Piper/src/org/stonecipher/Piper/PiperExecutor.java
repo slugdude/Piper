@@ -18,10 +18,12 @@ import org.bukkit.plugin.Plugin;
 public class PiperExecutor implements ConsoleCommandSender {
 
 	private final ConsoleCommandSender sender;
+	private final Server server;
 	private final Socket socket;
 	private final String token;
 
-	public PiperExecutor(ConsoleCommandSender sender, Socket socket, String token) {
+	public PiperExecutor(ConsoleCommandSender sender, Server server, Socket socket, String token) {
+		this.server = server;
 		this.sender = sender;
 		this.socket = socket;
 		this.token = token;
@@ -43,10 +45,8 @@ public class PiperExecutor implements ConsoleCommandSender {
 	public void sendMessage(String[] arg) {
 		try {
 			PrintWriter dOut = new PrintWriter(new DataOutputStream(socket.getOutputStream()));
-			if (arg.length > 0) {
-				for (int i = 0; i < arg.length; i++) {
-					dOut.print(i + ":" + arg[i]);
-				}
+			for (int i = 0; i < arg.length; i++) {
+				dOut.println(arg[i]);
 			}
 			dOut.println("!:" + token);
 			dOut.flush();
@@ -129,7 +129,7 @@ public class PiperExecutor implements ConsoleCommandSender {
 
 	@Override
 	public Server getServer() {
-		return null;
+		return server;
 	}
 
 	@Override

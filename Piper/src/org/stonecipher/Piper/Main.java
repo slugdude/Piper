@@ -53,15 +53,9 @@ public class Main extends JavaPlugin {
 							@Override
 							public Boolean call() {
 								PiperExecutor wrapper = new PiperExecutor(
-										(ConsoleCommandSender) Bukkit.getConsoleSender(), socket,
+										(ConsoleCommandSender) Bukkit.getConsoleSender(), Bukkit.getServer(), socket,
 										config.getString("accesstoken"));
-								try {
-									if (Bukkit.getServer().dispatchCommand(wrapper, inputCommand.getFormattedCommand()))
-										return true;
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-								return false;
+								return Bukkit.getServer().dispatchCommand(wrapper, inputCommand.getFormattedCommand());
 							}
 						}).get();
 
