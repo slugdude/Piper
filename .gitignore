@@ -1,3 +1,4 @@
 Piper/.settings/*
 PiperClient/.settings/*
 PiperClient/META-INF/*
+.gitignore
