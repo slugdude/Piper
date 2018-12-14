@@ -11,6 +11,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,9 +19,9 @@ public class Main extends JavaPlugin {
 
 	Random rand = new Random();
 
-	FileConfiguration config = getConfig();
+	private ServerSocket listener;
+	private FileConfiguration config = getConfig();
 
-	// Fired when plugin is first enabled
 	@Override
 	public void onEnable() {
 		setupConfig();
@@ -29,7 +30,6 @@ public class Main extends JavaPlugin {
 		initializeListener();
 	}
 
-	// Fired when plugin is disabled
 	@Override
 	public void onDisable() {
 
@@ -38,7 +38,7 @@ public class Main extends JavaPlugin {
 	private void initializeListener() {
 		Thread commandListener = new Thread(() -> {
 			try {
-				ServerSocket listener = new ServerSocket(Integer.valueOf(config.getString("port")));
+				listener = new ServerSocket(Integer.valueOf(config.getString("port")));
 				while (true) {
 					Socket socket = listener.accept();
 					socket.setSoTimeout(500);
@@ -50,11 +50,21 @@ public class Main extends JavaPlugin {
 						getLogger().info("Client \'" + inputCommand.getAddress() + "\' executed \'"
 								+ inputCommand.getFormattedCommand() + "\'.");
 						boolean success = Bukkit.getScheduler().callSyncMethod(this, new Callable<Boolean>() {
+							@Override
 							public Boolean call() {
-								return Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(),
-										inputCommand.getFormattedCommand());
+								PiperExecutor wrapper = new PiperExecutor(
+										(ConsoleCommandSender) Bukkit.getConsoleSender(), socket,
+										config.getString("accesstoken"));
+								try {
+									if (Bukkit.getServer().dispatchCommand(wrapper, inputCommand.getFormattedCommand()))
+										return true;
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								return false;
 							}
 						}).get();
+
 					} else {
 						getLogger().info("Denied access for client \'" + inputCommand.getAddress()
 								+ "\'. Invalid access token!");
