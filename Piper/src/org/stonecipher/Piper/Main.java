@@ -49,13 +49,15 @@ public class Main extends JavaPlugin {
 					if (inputCommand.getToken().equals(config.getString("accesstoken"))) {
 						getLogger().info("Client \'" + inputCommand.getAddress() + "\' executed \'"
 								+ inputCommand.getFormattedCommand() + "\'.");
+						PiperExecutor wrapper = new PiperExecutor((ConsoleCommandSender) Bukkit.getConsoleSender(),
+								Bukkit.getServer(), socket, config.getString("accesstoken"));
 						boolean success = Bukkit.getScheduler().callSyncMethod(this, new Callable<Boolean>() {
 							@Override
 							public Boolean call() {
-								PiperExecutor wrapper = new PiperExecutor(
-										(ConsoleCommandSender) Bukkit.getConsoleSender(), Bukkit.getServer(), socket,
-										config.getString("accesstoken"));
-								return Bukkit.getServer().dispatchCommand(wrapper, inputCommand.getFormattedCommand());
+								boolean result = Bukkit.getServer().dispatchCommand(wrapper,
+										inputCommand.getFormattedCommand());
+								wrapper.close();
+								return result;
 							}
 						}).get();
 

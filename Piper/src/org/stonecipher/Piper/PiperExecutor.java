@@ -34,7 +34,6 @@ public class PiperExecutor implements ConsoleCommandSender {
 		try {
 			PrintWriter dOut = new PrintWriter(new DataOutputStream(socket.getOutputStream()));
 			dOut.println(arg0);
-			dOut.println("!:" + token);
 			dOut.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -48,6 +47,17 @@ public class PiperExecutor implements ConsoleCommandSender {
 			for (int i = 0; i < arg.length; i++) {
 				dOut.println(arg[i]);
 			}
+			dOut.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void close() {
+		try {
+			PrintWriter dOut = new PrintWriter(new DataOutputStream(socket.getOutputStream()));
 			dOut.println("!:" + token);
 			dOut.flush();
 		} catch (IOException e) {
