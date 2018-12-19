@@ -1,7 +1,7 @@
 ## Piper
 The Spigot Server Command Piper.
 
-This plugin is designed to be used by system administrators who do not like having to use tmux send-keys or its screen equivolent. Instead of that, this plugin and client provides a simple way for administrators to send their server commands and get the resulting output, not interfering with the console in the process.
+This plugin is designed to be used by system administrators who do not like having to use tmux send-keys or its screen equivalent. Instead of that, this plugin and client provides a simple way for administrators to send their server commands and get the resulting output, not interfering with the console in the process.
 
 Note: due to limitations in the spigot-api, this does not work with Mojang-provided commands. Yes, I am researching ways to circumvent this.
 
